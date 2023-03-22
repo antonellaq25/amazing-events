@@ -48,7 +48,7 @@ function getEventWithHighestAttendance(events) {
             eventWithHighestAttendance = event
         } else {
             let percentageOfAtt1 = (eventWithHighestAttendance.assistance || eventWithHighestAttendance.estimate) * 100 / eventWithHighestAttendance.capacity
-            let percentageOfAtt2 = (event.assistance || event.estimate) * 100 / eventWithHighestAttendance.capacity
+            let percentageOfAtt2 = (event.assistance || event.estimate) * 100 / event.capacity
 
             if (percentageOfAtt1 < percentageOfAtt2) {
                 eventWithHighestAttendance = event
@@ -98,14 +98,16 @@ function getUpcomingEventsStats(categories, events, currentDate) {
 
         events.forEach(event => {
             if (category === event.category && checkDate(event.date, currentDate, 'upcoming')) {
-                categoryRevenue += event.price * event.assistance
+                categoryRevenue += event.price * (event.assistance || event.estimate)
                 attendance += event.assistance || event.estimate
                 capacity += event.capacity
             }
         })
         categoryPercentage = attendance * 100 / capacity
-
-        upcomingEventStats.push({ categoryName: categoryName, categoryRevenue: categoryRevenue, categoryPercentage: categoryPercentage })
+        if(categoryRevenue != 0){
+            upcomingEventStats.push({ categoryName: categoryName, categoryRevenue: categoryRevenue, categoryPercentage: categoryPercentage })
+        }
+        
 
     }
 
@@ -117,7 +119,7 @@ function checkDate(eventDate, currentDate, type) {
     var g1 = new Date(currentDate);
     var g2 = new Date(eventDate);
     if (type == 'upcoming') {
-        return g2 < g1;
+        return g1 < g2;
     } else { return g1 > g2; }
 
 
