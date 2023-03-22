@@ -1,5 +1,6 @@
 let categoriesEvent = [];
 let events =[];
+let currentDate = '';
 
 function searchCategory(){
 	input = document.getElementById('searchBar');
@@ -35,6 +36,7 @@ function searchCategory(){
 fetch('https://mh.up.railway.app/api/amazing-events')
     .then((response) => response.json())
     .then((json) => {
+		currentDate = json.currentDate;
         const result = json.events.filter(event=> checkDate(event.date, json.currentDate));
 
         for (i = 0; i < result.length; i++) {
@@ -99,6 +101,7 @@ function addCategories(category) {
  function eventFilter(){
    let checkedCategories =  categoriesEvent.filter(getFilteredCategories)
    let filteredEvents =  events.filter(event=> checkedCategories.includes(event.category));  
+   filteredEvents = filteredEvents.filter(event => checkDate(event.date, currentDate))
    console.log(filteredEvents)
    const cardSection = document.querySelector("#past-events-row");
    cardSection.innerHTML =' ';

@@ -1,5 +1,6 @@
 let categoriesEvent = [];
 let events =[];
+let currentDate = '';
 
 
 function searchCategory(){
@@ -34,6 +35,7 @@ function searchCategory(){
 fetch('https://mh.up.railway.app/api/amazing-events')
     .then((response) => response.json())
     .then((json) => {
+		currentDate =json.currentDate;
         const result = json.events.filter(event=> checkDate(event.date, json.currentDate));
         for (i = 0; i < result.length; i++) {
             console.log(result[i].name);
@@ -77,7 +79,7 @@ fetch('https://mh.up.railway.app/api/amazing-events')
 	 function checkDate(eventDate, currentDate){
 		 var g1 = new Date(currentDate);
 		 var g2 = new Date(eventDate);
-		 return g2 < g1;
+		 return g2 > g1;
 	 }
 	 function addCategories(category) {
 		 let categoryId = category.replace(' ', '_')
@@ -99,6 +101,7 @@ fetch('https://mh.up.railway.app/api/amazing-events')
 	  function eventFilter(){
 		let checkedCategories =  categoriesEvent.filter(getFilteredCategories)
 		let filteredEvents =  events.filter(event=> checkedCategories.includes(event.category));  
+		filteredEvents = filteredEvents.filter(event => checkDate(event.date, currentDate))
 		console.log(filteredEvents)
 		const cardSection = document.querySelector("#upcoming-events-row");
 		cardSection.innerHTML =' ';
@@ -112,9 +115,5 @@ fetch('https://mh.up.railway.app/api/amazing-events')
 		 }
 	  }
 
-function checkDate(eventDate, currentDate){
-    var g1 = new Date(currentDate);
-    var g2 = new Date(eventDate);
-    return g2 > g1;
-}
+
 
