@@ -34,7 +34,7 @@ function showError(){
 </div>`	
 }
 
-fetch('../data.json')
+fetch('https://mh.up.railway.app/api/amazing-events')
     .then((response) => response.json())
     .then((json) => { 
      

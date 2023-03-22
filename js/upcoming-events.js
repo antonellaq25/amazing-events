@@ -31,7 +31,7 @@ function searchCategory(){
   }
 
 
-fetch('../data.json')
+fetch('https://mh.up.railway.app/api/amazing-events')
     .then((response) => response.json())
     .then((json) => {
         const result = json.events.filter(event=> checkDate(event.date, json.currentDate));
